@@ -1,0 +1,175 @@
+# Exploración Categórica
+
+
+
+* Leer Datos
+
+```{r}
+link="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU8s1mj3YyMnXUy0VPDk7nsk33kOehLC_TJWImAtZdyXATbNISF4xSGCXNEZZeNLpbmsNvGGeAV3S3/pub?gid=1483430730&single=true&output=csv"
+
+sere19=read.csv(link, stringsAsFactors = F,na.strings = '')
+
+```
+
+
+* Identificando nombres de variables:
+
+```{r}
+names(sere19)
+```
+
+
+* Identificando tipo de variable:
+```{r}
+str(sere19)
+```
+
+
+
+
+
+## Parte 1. Explorando Variables NOMINALES
+
+1. Tabla
+```{r}
+# simple
+table(sere19$MODALIDAD)
+```
+
+
+
+Ahora sí, la tabla de frecuencias:
+```{r}
+# completa
+library(questionr)
+library(magrittr)
+NomDf=freq(sere19$MODALIDAD,total = F,sort = 'dec',exclude = c(NA)) %>% data.frame()
+NomDf=data.frame(variable=row.names(NomDf),NomDf,row.names = NULL)
+NomDf
+```
+
+
+
+2. Gráfico
+```{r}
+library(ggplot2)
+base = ggplot(data=NomDf,aes(x=variable,y=n)) 
+base1= base + scale_x_discrete(limits=NomDf$variable)
+bar1 = base1 + geom_bar(stat='identity') 
+bar1
+```
+```{r}
+text1="¿Qué acción es mas común?"
+text2="Acción"
+text3="Conteo"
+text4="Fuente: Municipalidad de San Isidro"
+
+bar2= bar1 + labs(title=text1,
+                      x =text2, 
+                      y = text3,
+                      caption = text4) 
+bar2
+```
+
+```{r}
+bar2 + theme_classic() + 
+            theme(plot.title = element_text(hjust = 0.5,size=15), # centrar y agrandar
+                  plot.caption = element_text(hjust = 0), # a la derecha
+                  axis.text.x = element_text(angle=45,hjust = 1)) # angulo
+```
+
+El gráfico de Pareto muestra dos medidas, los conteos y los porcentajes acumulados. Por tradición se trata de detectar que valores representan el 80%. 
+```{r}
+library(qcc)
+pareto.chart(table(sere19$MODALIDAD),cumperc = c(0,50,80,100))
+```
+
+
+3. Estadísticos: 
+
+* Centrales:
+  - La Moda
+
+```{r}
+library(DescTools)
+Mode(sere19$MODALIDAD)
+```
+
+
+- Concentracion: Herfindahl- Hirschman
+
+```{r}
+dataTable=table(sere19$MODALIDAD)
+
+# * < 0.01 : indica que la moda no es significativa, las categorias tienen pesos similares.
+# * < 0.15 : indica que la moda no es significativa, varias categorias tienen pesos similares.
+# * entre 0.15 - 0.25: hay una moda.
+# * > 0.25: La moda se diferencia de los demas
+
+Herfindahl(dataTable)
+```
+
+
+- Representatividad Efectiva :  Laakso - Taagepera
+
+```{r}
+1/sum(prop.table(dataTable)**2)
+```
+Hay 3 grupos representativos.
+
+
+## Parte 1. Explorando Variables ORDINAL
+
+```{r}
+OrdDf=freq(sere19$DÍA,total = F,exclude = c(NA)) %>% data.frame()
+OrdDf=data.frame(variable=row.names(OrdDf),OrdDf,row.names = NULL)
+OrdDf
+```
+
+```{r}
+pareto.chart(table(sere19$DÍA),cumperc = c(0,50,80,100))
+```
+
+```{r}
+ggplot(sere19,aes(y=DÍA)) + geom_boxplot() + scale_y_discrete(limits=OrdDf$variable) 
+```
+
+3. Estadísticos: 
+
+* Centrales:
+  - La Moda
+
+```{r}
+library(DescTools)
+Mode(sere19$DÍA)
+```
+
+
+- Concentracion: Herfindahl- Hirschman
+
+```{r}
+dataTable=table(sere19$DÍA)
+
+# * < 0.01 : indica que la moda no es significativa, las categorias tienen pesos similares.
+# * < 0.15 : indica que la moda no es significativa, varias categorias tienen pesos similares.
+# * entre 0.15 - 0.25: hay una moda.
+# * > 0.25: La moda se diferencia de los demas
+
+Herfindahl(dataTable)
+```
+
+
+- Representatividad Efectiva :  Laakso - Taagepera
+
+```{r}
+1/sum(prop.table(dataTable)**2)
+```
+Hay casi 7 grupos representativos.
+
+
+- Mediana
+
+```{r}
+Median(sere19$DÍA)
+```
+
