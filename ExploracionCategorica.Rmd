@@ -1,12 +1,34 @@
-# Exploración Categórica
+center><img src="https://github.com/PoliticayGobiernoPUCP/estadistica_anapol2/raw/master/PICS/LOGO_PUCP.png" width="500"></center>
+
+<center> <header><h1>GOBIERNO Y DECISIONES PUBLICAS</h1>  </header></center>
+
+* Profesor:  <a href="http://www.pucp.edu.pe/profesor/jose-manuel-magallanes/" target="_blank">Dr. José Manuel Magallanes, Ph.D.</a> <br>
+    - Profesor del Departamento de Ciencias Sociales, Sección de Ciencia Política y Gobierno.
+    - [Oficina 105](https://goo.gl/maps/xuGeG6o9di1i1y5m6) - Edificio CISEPA / ECONOMIA / CCSS
+    - Telefono: (51) 1 - 6262000 anexo 4302
+    - Correo Electrónico: [jmagallanes@pucp.edu.pe](mailto:jmagallanes@pucp.edu.pe)
+    
+-----
+
+<a id='beginning'></a>
 
 
+# Sesión 1: Exploración Categórica
 
 * Leer Datos
 
-```{r}
-link="https://docs.google.com/spreadsheets/d/e/2PACX-1vTU8s1mj3YyMnXUy0VPDk7nsk33kOehLC_TJWImAtZdyXATbNISF4xSGCXNEZZeNLpbmsNvGGeAV3S3/pub?gid=1483430730&single=true&output=csv"
+Estos datos los trajimos de Google. Para convertir un archivo en Excel a uno de Google, sigue estos pasos. Verás que al final consigo el link a ser usado en esta sesion:
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/hogYE1sN2po" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+El link, que tine datos de 2019, lo uso en este codigo y traigo los datos para el análisis.
+
+```{r}
+# comentario: enlace está entre comillas
+
+link="https://docs.google.com/spreadsheets/d/e/2PACX-1vRcJpnJqH9VzTXl4NMv0zX45yRkXeMNST3fkSfGFCpUTh0S-dSzRtUj7CJqAzqMUE5r6tKQRZzdKq9V/pub?gid=1802780199&single=true&output=csv"
+
+# comentario: funcion read.csv le entrega datos al objeto 'sere19':
 sere19=read.csv(link, stringsAsFactors = F,na.strings = '')
 
 ```
@@ -15,24 +37,24 @@ sere19=read.csv(link, stringsAsFactors = F,na.strings = '')
 * Identificando nombres de variables:
 
 ```{r}
-names(sere19)
+names(sere19) # nombres columna en el objeto
 ```
 
 
 * Identificando tipo de variable:
 ```{r}
-str(sere19)
+str(sere19) # sera numero? texto? o factor?
 ```
-
-
 
 
 
 ## Parte 1. Explorando Variables NOMINALES
 
 1. Tabla
+
 ```{r}
-# simple
+# simple exploración con función table:
+
 table(sere19$MODALIDAD)
 ```
 
@@ -40,24 +62,46 @@ table(sere19$MODALIDAD)
 
 Ahora sí, la tabla de frecuencias:
 ```{r}
-# completa
+# tabla de frecuencias avanzada
 library(questionr)
 library(magrittr)
 NomDf=freq(sere19$MODALIDAD,total = F,sort = 'dec',exclude = c(NA)) %>% data.frame()
 NomDf=data.frame(variable=row.names(NomDf),NomDf,row.names = NULL)
+
+# viendo a NomDf
 NomDf
 ```
 
 
 
 2. Gráfico
+
+El gráfico para las categóricas es el de **barras**:
+
 ```{r}
-library(ggplot2)
+library(ggplot2) # instalar previamente
+
+# en base solo se pone: en data como se llama la tabla de frecuencias
+# y en aes la variable 'x' para los nombres y la 'y' para los conteos.
 base = ggplot(data=NomDf,aes(x=variable,y=n)) 
-base1= base + scale_x_discrete(limits=NomDf$variable)
-bar1 = base1 + geom_bar(stat='identity') 
+
+# luego a la base se le pide añadir la 'geometria' deseada:
+bar1 = base + geom_bar(stat='identity') 
+
+# aqui resultado:
 bar1
 ```
+
+Las barras salen orden alfabetico, para que respeten el orden de la tabla 'NomDf' hay que ser explicitos:
+```{r}
+bar1 = bar1 + scale_x_discrete(limits = NomDf$variable)
+bar1
+```
+
+En los gráficos de barra, sólo las variables de tipo NOMINAL, como ésta, se pueden reordenar a gusto.
+
+Podemos poner titulos así:
+
 ```{r}
 text1="¿Qué acción es mas común?"
 text2="Acción"
@@ -71,6 +115,8 @@ bar2= bar1 + labs(title=text1,
 bar2
 ```
 
+
+Si quieres más cambios detallados:
 ```{r}
 bar2 + theme_classic() + 
             theme(plot.title = element_text(hjust = 0.5,size=15), # centrar y agrandar
@@ -80,20 +126,23 @@ bar2 + theme_classic() +
 
 El gráfico de Pareto muestra dos medidas, los conteos y los porcentajes acumulados. Por tradición se trata de detectar que valores representan el 80%. 
 ```{r}
-library(qcc)
+library(qcc) # instalar antes
 pareto.chart(table(sere19$MODALIDAD),cumperc = c(0,50,80,100))
 ```
 
+Las acciones de conminar y de patrullaje son casi el 80% de las actividades de serenazgo de San Isidro.
 
 3. Estadísticos: 
 
 * Centrales:
-  - La Moda
+  - La Moda: indica cual es el más común.
 
 ```{r}
 library(DescTools)
 Mode(sere19$MODALIDAD)
 ```
+
+Del grafico ya la sabíamos.
 
 
 - Concentracion: Herfindahl- Hirschman
@@ -103,8 +152,8 @@ dataTable=table(sere19$MODALIDAD)
 
 # * < 0.01 : indica que la moda no es significativa, las categorias tienen pesos similares.
 # * < 0.15 : indica que la moda no es significativa, varias categorias tienen pesos similares.
-# * entre 0.15 - 0.25: hay una moda.
-# * > 0.25: La moda se diferencia de los demas
+# * entre 0.15 - 0.3: hay una moda.
+# * > 0.3: La moda se diferencia de los demas
 
 Herfindahl(dataTable)
 ```
@@ -118,21 +167,47 @@ Herfindahl(dataTable)
 Hay 3 grupos representativos.
 
 
-## Parte 1. Explorando Variables ORDINAL
+## Parte 2. Explorando Variables ORDINAL
+
+La variable DIA toma siete valores, de domingo a sabado:
+
+```{r}
+table(sere19$DÍA)
+```
+
+
+Esta es una variable con ORDEN. Hagamos la tabla que usaremos en *ggplot*:
 
 ```{r}
 OrdDf=freq(sere19$DÍA,total = F,exclude = c(NA)) %>% data.frame()
 OrdDf=data.frame(variable=row.names(OrdDf),OrdDf,row.names = NULL)
+
+# listo
 OrdDf
 ```
+
+Barras:
+
+```{r}
+base=ggplot(data = OrdDf, aes(x=variable, y=n))
+
+bar= base + geom_bar(stat = 'identity')
+
+bar
+```
+
+Note que no alteré el orden.
+
+
+Veamos el Paretto:
 
 ```{r}
 pareto.chart(table(sere19$DÍA),cumperc = c(0,50,80,100))
 ```
 
-```{r}
-ggplot(sere19,aes(y=DÍA)) + geom_boxplot() + scale_y_discrete(limits=OrdDf$variable) 
-```
+Como no hay mucha diferencia, 5 dias de 7 suman el 80%.
+
+
 
 3. Estadísticos: 
 
@@ -152,8 +227,8 @@ dataTable=table(sere19$DÍA)
 
 # * < 0.01 : indica que la moda no es significativa, las categorias tienen pesos similares.
 # * < 0.15 : indica que la moda no es significativa, varias categorias tienen pesos similares.
-# * entre 0.15 - 0.25: hay una moda.
-# * > 0.25: La moda se diferencia de los demas
+# * entre 0.15 - 0.3: hay una moda.
+# * > 0.3: La moda se diferencia de los demas
 
 Herfindahl(dataTable)
 ```
@@ -164,7 +239,7 @@ Herfindahl(dataTable)
 ```{r}
 1/sum(prop.table(dataTable)**2)
 ```
-Hay casi 7 grupos representativos.
+Hay casi 7 grupos representativos (nada destaca)
 
 
 - Mediana
@@ -173,3 +248,16 @@ Hay casi 7 grupos representativos.
 Median(sere19$DÍA)
 ```
 
+En la ordinal ya se puede pedir _mediana_. La mediana indica hasta qué valor llega el 50% de los valores que han tomado los datos. Aquí dice que el 50% de los incidentes ocurren de domingo a miercoles.
+
+Un gráfico que muestra ello es:
+
+```{r}
+ggplot(sere19,aes(y=DÍA)) + geom_boxplot() + scale_y_discrete(limits=OrdDf$variable) 
+```
+
+Note los valores 3, 4 y 6.
+
+* El 3 es el primer cuartil: 25% de las acciones de los serenos se dan de domingo a miercoles.
+* El 4 es la mediana o cuartil 2.
+* El 6 es el cuartil 3: Otro 25% de las acciones de los serenos se dan de viernes a sábado.
