@@ -21,7 +21,7 @@ Estos datos los trajimos de Google. Para convertir un archivo en Excel a uno de 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/hogYE1sN2po" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-El link, que tine datos de 2019, lo uso en este codigo y traigo los datos para el análisis.
+El link, que tiene datos de 2019, lo uso en este código y traigo los datos para el análisis.
 
 ```{r}
 # comentario: enlace está entre comillas

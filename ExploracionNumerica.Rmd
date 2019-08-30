@@ -1,0 +1,100 @@
+center><img src="https://github.com/PoliticayGobiernoPUCP/estadistica_anapol2/raw/master/PICS/LOGO_PUCP.png" width="500"></center>
+
+<center> <header><h1>GOBIERNO Y DECISIONES PUBLICAS</h1>  </header></center>
+
+* Profesor:  <a href="http://www.pucp.edu.pe/profesor/jose-manuel-magallanes/" target="_blank">Dr. José Manuel Magallanes, Ph.D.</a> <br>
+    - Profesor del Departamento de Ciencias Sociales, Sección de Ciencia Política y Gobierno.
+    - [Oficina 105](https://goo.gl/maps/xuGeG6o9di1i1y5m6) - Edificio CISEPA / ECONOMIA / CCSS
+    - Telefono: (51) 1 - 6262000 anexo 4302
+    - Correo Electrónico: [jmagallanes@pucp.edu.pe](mailto:jmagallanes@pucp.edu.pe)
+    
+-----
+
+<a id='beginning'></a>
+
+
+# Sesión 2: Exploración Numérica
+
+* Leer Datos:
+
+
+El link tiene datos de mineria ocurridos en las empresas mineras del 2000 al 2006:
+
+```{r}
+# comentario: enlace está entre comillas
+
+link="https://docs.google.com/spreadsheets/d/e/2PACX-1vTgDnZeJUe5Qdn-Il3Ob1u630GIYyxf5nomPu3oqrb5L31vUYCHsrtA0_tl2gEQ82mOI7-l1B9TtyZo/pub?gid=753961441&single=true&output=csv"
+
+# comentario: funcion read.csv le entrega datos al objeto 'sere19':
+mineria=read.csv(link, stringsAsFactors = F,na.strings = '')
+
+```
+
+
+Las variables numéricas no requieren tablas de frecuencia para ser exploradas. 
+
+El grafico inicial a usar es el histograma:
+
+```{r}
+library(ggplot2)
+base=ggplot(mineria,aes(x=accidentes))
+histNum= base + geom_histogram(bins=7) 
+histNum 
+```
+
+Al histograma le podemos añadir su polígono de frecuencias:
+
+```{r}
+histNum1= histNum + geom_freqpoly(bins=7,col='blue')
+histNum1
+```
+
+Y su ojiva de datos acumulados:
+
+```{r}
+histNum1  + stat_bin(aes(y=cumsum(..count..)),geom="line",bins=7,col='red') 
+```
+
+
+La mediana aparece claramente en el boxplot, es la linea más gruesa _dentro_ de la caja:
+
+```{r}
+base=ggplot(mineria,aes(y=accidentes))
+base + geom_boxplot() + coord_flip()
+```
+
+
+
+1. Medidas de centralidad:
+
+* Mediana
+
+```{r}
+median(mineria$accidentes, na.rm = T)
+```
+
+
+
+
+
+* Media
+
+```{r}
+mean(mineria$accidentes, na.rm = T)
+```
+
+La media no se muestra en ninguna gráfica, pero podemos mostrarla si deseamos:
+
+```{r}
+base=ggplot(mineria,aes(x=accidentes))
+
+histNum= base + geom_histogram(bins=7,fill='gray') 
+histNum +geom_vline(xintercept = mean(mineria$accidentes, na.rm = T),col='red') +
+         geom_vline(xintercept = median(mineria$accidentes, na.rm = T),col='blue')  +
+         scale_color_manual(name = "Centralidad", values = c(mediana = "blue", media = "red"))
+```
+
+
+____
+
+Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)
