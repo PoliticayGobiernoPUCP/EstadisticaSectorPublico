@@ -261,3 +261,8 @@ Note los valores 3, 4 y 6.
 * El 3 es el primer cuartil: 25% de las acciones de los serenos se dan de domingo a miercoles.
 * El 4 es la mediana o cuartil 2.
 * El 6 es el cuartil 3: Otro 25% de las acciones de los serenos se dan de viernes a sábado.
+
+
+____
+
+Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)

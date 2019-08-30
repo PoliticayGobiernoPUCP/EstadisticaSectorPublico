@@ -58,7 +58,7 @@ ____
 
 ### 4. Programación de Clases
 
-* Análisis Univariado Categórico
+* [Análisis Univariado Categórico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionCategorica.html)
 * Análisis Univariado Numérico
 * Análisis Bivariado de Datos
 * Análisis de Conglomerados
