@@ -48,7 +48,7 @@ La exploración numérica nos debe sugerir:
 * Si hay asimetría, y hacia donde se concentran los datos.
 * Si hay valores atípicos.
 
-Del gráfico podemos decir que, como no es simétrico, informar la **media** de accidentes no será muy representativa (la **mediana** será la mejor opción); que la asimetría nos muestra que los accidentes son en su mayoría pocos. Hay un numero de accidentes que se aleja hacia valores altos, pero no estamos seguros si está tan lejos del 'centro' para ser atípico.
+Del gráfico podemos decir que, como no es simétrico, informar la **media** de accidentes no será muy representativa (la **mediana** será la mejor opción); por otro lado, como la asimetría nos muestra que los accidentes son en su mayoría pocos. Hay un numero de accidentes que se aleja hacia valores altos, pero no estamos seguros si está tan lejos del 'centro' para ser atípico.
 
 Los atípicos se ven claramente en un boxplot:
 
@@ -94,21 +94,26 @@ library(DescTools)
 Skew(mineria$accidentes,conf.level = 0.05)
 ```
 
-Los cuartiles son 5 y 13, su distancia es:
+La distancia intercuartilica es importante saberla:
 
 ```{r}
 IQR(mineria$accidentes)
 ```
 
-Se asume que un atípico está 1.5 IQR del cuartil 3:
+Es decir, entre el primer y tercer cuartil hay sólo 8 valores; asi, el 50% de los valores centrales varian en 8 valores. Así, podemos proponer que un atípico es aquel que está a una distancia lejana de estos valores centrales. Este umbral, tradicionalmente se calcula así:
 
 ```{r}
-13+1.5*IQR(mineria$accidentes)
+# cuartil tres
+q3=as.numeric(summary(mineria$accidentes)[5])
+
+# calculando umbral (distancia del q3)
+umbral= q3+1.5*IQR(mineria$accidentes)
+umbral
 ```
 
-Osea, en teoria, el máximo de esta distribución debe ser 25. Por lo que todo valor mayor de 25 será considerado un atípico:
+Osea, en teoria, todo valor mayor que `r umbral` será considerado un atípico:
 ```{r}
-mineria[mineria$accidentes>25,]
+mineria[mineria$accidentes>umbral,]
 ```
 
 Los accidentes pueden ser representados en el Gini:
@@ -117,14 +122,14 @@ Los accidentes pueden ser representados en el Gini:
 Gini(mineria$accidentes,conf.level=0.95)
 ```
 
-Si el Gini es 0, todas las empresas cusasn la misma cantidad de accidentes; si fuera 1, una sola empresa causa todos los accidentes.
+Si el Gini es 0, todas las empresas causan la misma cantidad de accidentes; si fuera 1, una sola empresa causa todos los accidentes.
 
 Normalmente al Gini le acompaña la curva de Lorenz:
 
 ```{r}
 library(gglorenz) # instalar 
 
-base1 + gglorenz::stat_lorenz() +
+base1 + gglorenz::stat_lorenz(color='red') +
     geom_abline(linetype = "dashed") + coord_fixed() +
     labs(x = "% Acumulado de Empresas",
          y = "% Acumulado de Accidentes",
@@ -132,6 +137,7 @@ base1 + gglorenz::stat_lorenz() +
          caption = "Fuente: MINEM")
 ```
 
+Si la curva se acerca a la diagonal, hay igualdad de distribución: cada empresa contribuye con la misma cantidad de accidentes (Gini = 0).
 
 ____
 
