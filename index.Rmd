@@ -60,7 +60,7 @@ ____
 
 * [Análisis Univariado Categórico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionCategorica.html)
 * [Análisis Univariado Numérico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionNumerica.html)
-* Análisis Bivariado de Datos
+* [Análisis Bivariado de Datos](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionBivariada.html)
 * Análisis de Conglomerados
 * Análisis de Regresión Lineal
 * Análisis de Regresión Logístico
