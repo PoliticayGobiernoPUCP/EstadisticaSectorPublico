@@ -1,0 +1,198 @@
+<center><img src="https://github.com/PoliticayGobiernoPUCP/estadistica_anapol2/raw/master/PICS/LOGO_PUCP.png" width="500"></center>
+
+<center> <header><h1>ESTADISTICA PARA EL SECTOR PUBLICO</h1>  </header></center>
+
+* Profesor:  <a href="http://www.pucp.edu.pe/profesor/jose-manuel-magallanes/" target="_blank">Dr. José Manuel Magallanes, Ph.D.</a> <br>
+    - Profesor del Departamento de Ciencias Sociales, Sección de Ciencia Política y Gobierno.
+    - [Oficina 105](https://goo.gl/maps/xuGeG6o9di1i1y5m6) - Edificio CISEPA / ECONOMIA / CCSS
+    - Telefono: (51) 1 - 6262000 anexo 4302
+    - Correo Electrónico: [jmagallanes@pucp.edu.pe](mailto:jmagallanes@pucp.edu.pe)
+    
+-----
+
+<a id='beginning'></a>
+
+
+# Sesión 3: Exploración Bivariada
+
+Si la exploración univariada nos sugirió problemas, la bivariada nos sugerirá respuestas. Este es un momento crítico pues nos debemos confundirnos. Son solo sugerencias, y estadisticamente no sabemos si es causalidad; solo nos acercamos a ver asociación, y en ese caso de tipo lineal; es decir, saber si el el aumento de los valores de una variable coinciden con el aumento o disminución de los valores de otra.
+
+Exploremos el gasto a nivel de gobierno de gobierno nacioal segun los datos ofrecidos por el mef en su pagina de [consulta amigable](https://www.mef.gob.pe/es/seguimiento-de-la-ejecucion-presupuestal-consulta-amigable). Los datos los ves a continuación en GoogleSheets:
+
+
+<iframe width="1000" height="800"src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIzeNWn9X1UIhEWY3pnAPdUdSP9Ni7k2btVnt9GuatiSexZCAVmn09INK2fpeY8SqKPWciBI4OSfRh/pubhtml?widget=true&amp;headers=false"></iframe>
+
+Nuestro análisis bivariado lo haremos sobre dos situaciones:
+
+* Cuando tenemos dos columnas numericas.
+* Cuando tenemos una columna numerica y una columna categorica.
+
+
+## Caso 1: Una columna numérica y una categórica:
+
+Aqui usaremos el modelo 2:
+
+
+```{r}
+# link a google:
+lk2="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIzeNWn9X1UIhEWY3pnAPdUdSP9Ni7k2btVnt9GuatiSexZCAVmn09INK2fpeY8SqKPWciBI4OSfRh/pub?gid=1108202370&single=true&output=csv"
+
+# colectando datos
+gasto2=read.csv(lk2,stringsAsFactors = F)
+```
+
+
+Veamos cómo se trajo la data:
+```{r}
+str(gasto2)
+```
+
+
+Periodo lo usaremos como variable categórica:
+
+```{r}
+gasto2$periodo=as.factor(gasto2$periodo)
+```
+
+
+Queremos testear la **hipotesis** que el nivel de avance entre un año de primer mandato y dos años después es diferente, y quizas hallar que se avanza más luego de pasado el primer año de mandato (efectivo desde medio año). El avance lo define el MEF como la tasa entre devengado y presupuesto inicial modificado. Calculemos esa **nueva** variable:
+
+```{r}
+gasto2$avance=gasto2$devengado/gasto2$pim
+```
+
+Aquí podemos ver ambas medias:
+
+```{r}
+# numerico, factor, funcion
+tapply(gasto2$avance,gasto2$periodo, FUN = mean)
+```
+
+O mas detalles:
+
+```{r}
+# numerico, factor, funcion
+tapply(gasto2$avance,gasto2$periodo, FUN = summary)
+```
+
+Visualizar con histograma:
+
+```{r}
+library(ggplot2)
+ggplot(gasto2, aes(x=avance, fill=periodo)) +
+    geom_histogram(bins=10, alpha=.3, position="identity") 
+    
+```
+
+O con boxplot:
+
+```{r}
+ggplot(gasto2, aes(y=avance, fill=periodo)) + geom_boxplot()
+```
+
+Habrá variación en promedio?
+```{r}
+summary(aov(avance~periodo, data=gasto2))
+```
+
+La probabilidad que las medias sean iguales es muy alta (0.966); para rechazar la igualdad por convención se usa una probabilidad menor a 0.05.
+
+Lo mismo obtendríamos con su simil no-paramétrico:
+
+```{r}
+kruskal.test(avance~periodo, data=gasto2)
+```
+
+
+## Caso 2: Dos columnas numéricas
+
+Aquí podemos usar el modelo 1:
+
+
+```{r}
+# link a google:
+lk1="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIzeNWn9X1UIhEWY3pnAPdUdSP9Ni7k2btVnt9GuatiSexZCAVmn09INK2fpeY8SqKPWciBI4OSfRh/pub?gid=0&single=true&output=csv"
+
+# colectando datos
+gasto1=read.csv(lk1,stringsAsFactors = F)
+```
+
+Veamos cómo se trajo la data:
+```{r}
+str(gasto1)
+```
+
+Sabiendo lo anterior, nuestra curiosidad aumenta en saber si cada uno de los sectores aumento de un año a dos años despues. Calculemos las **nuevas** variables _avance_ para ambos años:
+
+```{r}
+# para 2016
+gasto1$avance2016=gasto1$devengado2016G/gasto1$pim2016G
+
+# para 2018
+gasto1$avance2018=gasto1$devengado2018G/gasto1$pim2018G
+```
+
+
+Exploremos el coeficiente de correlación:
+
+```{r}
+cor.test(~avance2016 + avance2018, data = gasto1)
+```
+
+Esto sugiere que ambas variables se correlacionan positivamente. La intensidad de la correlación es alta. Eso lo vemos aquí:
+
+
+```{r}
+base = ggplot(gasto1, aes(avance2016, avance2018, label = sectorn))
+scatterplot1 = base + geom_point()  + 
+              xlim(0.7,1) + ylim(0.7,1) 
+scatterplot1
+```
+
+
+Pero podemos ir un paso más allá y sugerir un modelo de regresión. Produzcamos otra gráfica:
+
+```{r}
+base = ggplot(gasto1, aes(avance2016, avance2018, label = sectorn))
+scatterplot1 = base + geom_point()  + 
+              xlim(0.7,1) + ylim(0.7,1) 
+scatterplot2 = scatterplot1 + geom_abline(linetype = "dashed")
+scatterplot2
+```
+
+Veamos cada sector:
+
+```{r}
+scatterplot2 + geom_text(size = 3)
+```
+
+Mejoremos las etiquetas:
+
+```{r}
+library(ggrepel)
+
+scatterplot2 +geom_text_repel(size=3)
+                  
+```
+
+
+Se nota que hay sectores que mejoran, pero otros no. Veamos la regresión:
+
+```{r}
+regre=lm(avance2018~avance2016,data = gasto1)
+summary(regre)
+```
+
+```{r}
+scatterplot2 +geom_text_repel(size=3) +  
+    geom_abline(slope = regre$coefficients[2], 
+                intercept = regre$coefficients[1], 
+                color='red')
+```
+
+Esto NO indica que haya descenso, pero sí indica que el ángulo de la diagonal es mayor al de la  la recta de regresión. ¿Que necesesitaríamos para una "mejor" recta de regresión?
+
+____
+
+Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)
+
