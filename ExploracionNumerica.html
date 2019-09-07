@@ -261,7 +261,7 @@ box + scale_y_continuous(breaks = estadigrafos) </code></pre>
 <pre class="r"><code>library(DescTools)
 Skew(mineria$accidentes,conf.level = 0.05)</code></pre>
 <pre><code>##     skew   lwr.ci   upr.ci 
-## 2.251112 2.602798 2.672848</code></pre>
+## 2.251112 2.613957 2.721714</code></pre>
 <p>La distancia intercuartilica es importante saberla:</p>
 <pre class="r"><code>IQR(mineria$accidentes)</code></pre>
 <pre><code>## [1] 8</code></pre>
@@ -282,7 +282,7 @@ umbral</code></pre>
 <pre><code>## Warning in norm.inter(t, adj.alpha): extreme order statistics used as
 ## endpoints</code></pre>
 <pre><code>##      gini    lwr.ci    upr.ci 
-## 0.3362676 0.2739556 0.4481352</code></pre>
+## 0.3362676 0.2736994 0.4460106</code></pre>
 <p>Si el Gini es 0, todas las empresas causan la misma cantidad de accidentes; si fuera 1, una sola empresa causa todos los accidentes.</p>
 <p>Normalmente al Gini le acompaña la curva de Lorenz:</p>
 <pre class="r"><code>library(gglorenz) # instalar </code></pre>
