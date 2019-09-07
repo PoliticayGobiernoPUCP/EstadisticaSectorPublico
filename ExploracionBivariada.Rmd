@@ -184,10 +184,7 @@ summary(regre)
 ```
 
 ```{r}
-scatterplot2 +geom_text_repel(size=3) +  
-    geom_abline(slope = regre$coefficients[2], 
-                intercept = regre$coefficients[1], 
-                color='red')
+scatterplot2 +geom_text_repel(size=3) + geom_smooth(method = "lm", se = FALSE, color='red')
 ```
 
 Esto NO indica que haya descenso, pero sí indica que el ángulo de la diagonal es mayor al de la  la recta de regresión. ¿Que necesesitaríamos para una "mejor" recta de regresión?
