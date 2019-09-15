@@ -18,6 +18,11 @@ ____
 
 ## Pavimentando con votos 
 
+Vamos a trabajar con [estos datos](https://docs.google.com/spreadsheets/d/1-y2K9Yzn4mZX6gDkfWbd-cbJtBAFK9DbCME0dNwxqVQ/edit?usp=sharing):
+
+<iframe width="900" height="600" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSRpCC8gKIxMxpK0wjgLcl-GQWdw6sAeB16Sixkq6kZXeTfMS8_n70twbEbQ2tMcGp8tm-6x8qf8ieo/pubhtml?gid=234740779&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+
+
 **Objetivo**: Determinar qué fatores explican los recursos destinados a los municipios para el desarrollo vial en Colombia durante el primer gobierno del presidente Uribe (2002-2006).
 
 **Pregunta de investigación:** ¿Qué factores determinaron la asignación presupuestal del gasto en infraestructura vial en Colombia durante el primer gobierno de Uribe? 
@@ -400,4 +405,8 @@ regre + geom_vline(xintercept = 0, colour = "red",
                linetype = 2)  + theme_bw()
 ```
 
+
+____
+
+Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)
 
