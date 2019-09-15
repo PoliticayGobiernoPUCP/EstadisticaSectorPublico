@@ -1,0 +1,403 @@
+<center><img src="https://github.com/PoliticayGobiernoPUCP/estadistica_anapol2/raw/master/PICS/LOGO_PUCP.png" width="500"></center>
+
+<center> <header><h1>ESTADISTICA PARA EL SECTOR PUBLICO</h1>  </header></center>
+
+* Profesor:  <a href="http://www.pucp.edu.pe/profesor/jose-manuel-magallanes/" target="_blank">Dr. José Manuel Magallanes, Ph.D.</a> <br>
+    - Profesor del Departamento de Ciencias Sociales, Sección de Ciencia Política y Gobierno.
+    - [Oficina 105](https://goo.gl/maps/xuGeG6o9di1i1y5m6) - Edificio CISEPA / ECONOMIA / CCSS
+    - Telefono: (51) 1 - 6262000 anexo 4302
+    - Correo Electrónico: [jmagallanes@pucp.edu.pe](mailto:jmagallanes@pucp.edu.pe)
+    
+-----
+
+<a id='beginning'></a>
+
+
+# Sesión 4: Regresión Lineal
+____
+
+## Pavimentando con votos 
+
+**Objetivo**: Determinar qué fatores explican los recursos destinados a los municipios para el desarrollo vial en Colombia durante el primer gobierno del presidente Uribe (2002-2006).
+
+**Pregunta de investigación:** ¿Qué factores determinaron la asignación presupuestal del gasto en infraestructura vial en Colombia durante el primer gobierno de Uribe? 
+
+### Justificación del tema
+
+1. Colombia se caracteriza por su geografía accidentada. El tema de la ineficiencia de la interconexión del transporte ha estado continuamente en la agenda del gobierno. 
+
+2. Se diseñaron herramientas técnicas para racionalizar la inversión en infraestructura vial: Plan Vial 2500 y Programa Visión Colombiana 2019. 
+
+3. El gobierno destacó ante el congreso sus avances en materia de infraerstructura vial. En total, se pavimentaron más de 7 000 km!
+
+4. Distintos analistas destacaron como la priorización del gasto en infraestructura vial no parece responder a una priorización técnica. Gaviria (2007): "Los proyectos han sido seleccionados en base a un criterio político". 
+
+### Hipótesis 
+
+**Hipotesis 1:** La asignación presupuestal responde a criterios técnicos del PND. _Criterios técnicos_.
+
+**Hipótesis 2:** La asignación presupuestal responde a negociaciones bilaterales entre el Ejecutivo y el Legislativo basadas en negociaciones políticas y electorales. _Mecanismos clientelistas_.
+
+**Hipótesis 3:** La asignación presupuestal responde al esfuerzo del gobierno for fortalecer su base social a través de los CCG. _Esfuerzos populistas_.
+
+### Datos
+
+Se construyó una base de datos original en la que se recogió información sobre los montos del presupuesto destinados para ser invertidos en obras de infraestructura vial municipal, junto con información de cada municipio durante el periodo 2002-2006. 
+
+Carguemos la data:
+
+```{r eval=TRUE}
+link="https://docs.google.com/spreadsheets/d/e/2PACX-1vSRpCC8gKIxMxpK0wjgLcl-GQWdw6sAeB16Sixkq6kZXeTfMS8_n70twbEbQ2tMcGp8tm-6x8qf8ieo/pub?gid=234740779&single=true&output=csv"
+
+pavimentando=read.csv(link, stringsAsFactors = FALSE) 
+head(pavimentando)
+```
+
+```{r eval=TRUE}
+str(pavimentando,width=60, strict.width='cut')
+```
+
+### Operacionalización 
+
+#### Variable dependiente
+
+La variable que se busca explicar es la apropiación presupuestal total (en millones de dólares) que se le asignó a cada municipio durante el periodo de estudio.
+
+**Nota:** Para construir está variable se identificaron los municipios involucrados en cada Proyecto de Inversión Pública. En tanto el proyecto no discrimina el valor exacto invertido en cada municipio, a cada uno de ellos se le asignó el monto total del proyecto. 
+
+
+Estadísticos descriptivos:
+
+```{r eval=TRUE}
+summary(pavimentando$apropiaciondolar)
+```
+
+* ¿Es la distribución simétrica?
+
+Distribución: 
+
+```{r eval=TRUE}
+library(ggplot2)
+
+base=ggplot(pavimentando,aes(x=apropiaciondolar))
+base + geom_histogram(bins = 20)
+```
+
+* ¿Tendrá valores atípicos?
+
+```{r}
+base=ggplot(pavimentando,aes(y=apropiaciondolar))
+base + geom_boxplot() + coord_flip()
+```
+
+La apropiación presupuestal promedio fue de 8 millones de dólares. Se observa que existen municipios con montos 0 de inversión en infraestructura vial. 
+
+```{r eval=TRUE}
+nrow(pavimentando[pavimentando$apropiaciondolar== 0,])
+```
+
+Son 600 los municipios que no tuvieron recursos asignados en el primer periodo de Uribe!
+
+
+#### Variables independientes
+
+**Criterios técnicos**
+
+- Municipios priorizados
+
+Se ha creado una _variable nominal dicotómica_ que identifica si el municipio ha sido considerado como prioridad técnica en el Plan Nacional de Desarrollo, el Plan 2500 y el Banco de Proyectos de Inversión.
+
+
+```{r eval=TRUE}
+library(magrittr) # para concatenar funciones
+library(questionr)
+tPrio=freq(pavimentando$priorizado,total = F,valid = F) 
+tPrio=data.frame(priorizado=row.names(tPrio),
+                 conteo=tPrio$n,
+                 pct=tPrio$`%`,
+                 row.names = NULL)
+tPrio
+```
+
+
+```{r}
+#usando nombres de la tabla:
+base=ggplot(tPrio, aes(x=priorizado,y=conteo))
+barPrio= base + geom_bar(stat = 'identity')
+
+#veamos
+barPrio
+```
+
+
+
+
+276 municipios han sido priorizados. Ello corresponde al 25% del total de municipios. 
+
+
+
+
+**Mecanismos clientelistas**
+
+Se utiliza información sobre el comportamiento electoral del municipio.
+
+- Votos oposición 
+
+Se ha creado una _variable numérica_ con el porcentaje de votos que obtuvieron los candidatos a la Cámara de Rpresentantes que pertenecían a partidos de oposición. 
+
+
+```{r eval=TRUE}
+summary(pavimentando$pctopo)
+```
+
+El porcentaje promedio es de 27.8% de votos.
+
+```{r eval=TRUE}
+base=ggplot(pavimentando,aes(x=pctopo))
+base + geom_histogram(bins = 20)
+
+```
+
+
+- Municipios con alcaldes uribistas
+
+Se ha creado una _variable nominal dicotómica_ que identifica si en la alcaldía ganó un candidato de partidos simpatizantes con el uribismo. 
+
+
+
+```{r eval=TRUE}
+tUribista=freq(pavimentando$uribista,total = F,
+               exclude=NA,valid = F,) 
+tUribista=data.frame(uribista=row.names(tUribista),
+                 conteo=tUribista$n,
+                 pct=tUribista$`%`,
+                 row.names = NULL)
+tUribista
+
+```
+
+```{r}
+
+#usando nombres de la tabla:
+base=ggplot(tUribista, aes(x=uribista,y=conteo))
+barUri= base + geom_bar(stat = 'identity')
+
+#veamos
+barUri
+```
+
+
+En 560 municipios ganó la alcaldía un candidato uribista. Ello representa al 62.8% de municipios. 
+
+
+
+**Esfuerzos populistas**
+
+- Consejos Comunales 
+
+Se ha creado una _variable nominal dicotómica_ que identifica si presidente visitó a los Consejos Comunales. 
+
+
+```{r eval=TRUE}
+
+tConseComu=freq(pavimentando$consejocomunal,total = F,
+               exclude=NA,valid = F,) 
+tConseComu=data.frame(consejoComu=row.names(tConseComu),
+                 conteo=tConseComu$n,
+                 pct=tConseComu$`%`,
+                 row.names = NULL)
+tConseComu
+```
+
+```{r}
+
+#usando nombres de la tabla:
+base=ggplot(tConseComu, aes(x=consejoComu,y=conteo))
+base + geom_bar(stat = 'identity')
+
+```
+
+Presidente visitó 60 municipios donde se tuvieron Consejos Comunales. Ello representa al 5% de municipios. 
+
+
+- Consejo comunal con promesa de ejecución
+
+Se ha creado una _variable nominal dicotómica_ que identifica a los municipios en los que se prometío ejecutar recursos ante los Consejos Comunales.
+
+
+
+```{r eval=TRUE}
+tEjecu=freq(pavimentando$ejecucion,total = F,
+               exclude=NA,valid = F,) 
+tEjecu=data.frame(ejecucion=row.names(tEjecu),
+                 conteo=tEjecu$n,
+                 pct=tEjecu$`%`,
+                 row.names = NULL)
+tEjecu
+
+```
+
+```{r}
+base = ggplot(tEjecu,aes(x=ejecucion,y=conteo))
+base + geom_bar(stat = 'identity')
+```
+En 41 municipios se prometió ante Consejos Comunales. Ello representa al 3.7% de municipios.
+
+
+
+## Exploración Bivariada
+
+
+**Sub Hipotesis: Apropiación y Criterios Racionales**
+
+```{r}
+base=ggplot(pavimentando,aes(x=as.factor(priorizado),
+                             y=apropiaciondolar))
+base + geom_boxplot()# + coord_flip()
+```
+```{r}
+prueba=formula(apropiaciondolar~priorizado)
+kruskal.test(prueba,data=pavimentando)$p.value<0.05
+```
+
+
+
+### **Sub Hipotesis: Apropiación y Criterios Clientelares**
+
+**Apropiación y Oposición**:
+
+```{r}
+
+base=ggplot(pavimentando,aes(x=pctopo,y=apropiaciondolar))
+base + geom_point()
+
+```
+
+**La apropiación presupuestal está influenciada por el peso de la oposición a Uribe**
+
+```{r}
+cor.test(formula(~apropiaciondolar+pctopo),
+         data = pavimentando,
+         method='spearman', exact=F)$p.value<0.05
+```
+
+
+**Apropiación y Autoridad local**:
+
+```{r}
+
+base=ggplot(remove_missing(pavimentando),
+            aes(x=as.factor(uribista),
+                             y=apropiaciondolar))
+base + geom_boxplot()
+```
+
+**La apropiación presupuestal varía si el alcalde es uribista o no**.
+
+```{r eval=TRUE}
+prueba=formula(apropiaciondolar~uribista)
+kruskal.test(prueba,data=pavimentando)$p.value<0.05
+```
+
+
+### **Sub Hipotesis: Apropiación y Criterios Populistas**
+
+
+**Apropiación y visita del presidente a CC**:
+
+```{r}
+
+base=ggplot(remove_missing(pavimentando),
+            aes(x=as.factor(consejocomunal),
+                y=apropiaciondolar))
+base + geom_boxplot()
+```
+
+**La apropiación presupuestal varía si el presidente visitó al CC del municipio**.
+
+```{r eval=TRUE}
+prueba=formula(apropiaciondolar~consejocomunal)
+kruskal.test(prueba,data=pavimentando)$p.value<0.05
+```
+
+
+**Apropiación y promesa de ejecucion del presidente al CC**:
+
+```{r}
+base=ggplot(remove_missing(pavimentando),
+            aes(x=as.factor(ejecucion),
+                y=apropiaciondolar))
+base + geom_boxplot()
+```
+
+**La apropiación presupuestal varía si el presidente prometió ejecución al CC del municipio**.
+
+```{r eval=TRUE}
+prueba=formula(apropiaciondolar~ejecucion)
+kruskal.test(prueba,data=pavimentando)$p.value<0.05
+```
+
+
+#### Variables de control
+
+Se incorporan dos variables para controlar su efecto en la apropiación presupuestal.
+
+- Población total 
+
+Variable numérica que identifica el número de habitantes por cada cien mil. 
+
+
+```{r eval=TRUE}
+summary(pavimentando$poblacioncienmil)
+```
+
+
+- NBI
+
+Variable numérica que identifica el nivel de pobreza de cada municipio. 
+
+
+
+```{r eval=TRUE}
+summary(pavimentando$nbi)
+```
+
+## Modelos de regresión lineal
+
+Para evaluar las diferentes hipótesis sobre los distintos factores que afectan la apropiación presupuestal para inversión en obras de infraestructura vial se estiman un modelo de regresión lineal.
+
+El modelo considerando todas las variables independientes es el siguiente: 
+ 
+```{r}
+hipotesis=formula(apropiaciondolar~
+                    priorizado+
+                    pctopo+
+                    uribista+
+                    consejocomunal+
+                    ejecucion+
+                    poblacioncienmil+nbi)
+
+resultado=lm(hipotesis,data=pavimentando)
+summary(resultado)
+
+```
+
+
+```{r}
+library(dotwhisker)
+library(broom)
+library(dplyr)
+```
+
+```{r}
+resultado_t = tidy(resultado) %>%   
+    mutate(model = "resultado")
+
+regre= dwplot(resultado_t,
+              whisker_args = list(color='gray'),
+              dot_args = list(color='black')) 
+regre + geom_vline(xintercept = 0, colour = "red", 
+               linetype = 2)  + theme_bw()
+```
+
+
