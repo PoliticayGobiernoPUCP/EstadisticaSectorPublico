@@ -19,11 +19,15 @@ Para este curso debe tener una seria de conceptos básicos, los cuáles se detal
 
 ## Tabla de datos
 
-Todo nuestro trabajo en este curso utiliza tablas de datos. Si tiene una hoja de  Excel como ejemplo, esta es una tabla de datos y consta de filas y columnas, donde una celda es un valor.
+Todo nuestro trabajo en este curso utiliza tablas de datos. Si tiene una hoja de  Excel como ejemplo, esta es una tabla de datos y consta de filas y columnas, donde una celda es un valor. Abajo ves una tabla de datos:
+
+
+<iframe width="900" height="600" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQaT5aBBkkmVveNfPJSUHzRk6G8tfUUtSh4cJaZPbEJVGc7RNBsHdkJRxLnHDZpayBYXmNHB20_gLXV/pubhtml?gid=1481445534&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
 
 ## Filas de la tabla
 
 Cada fila representa la información de una unidad de análisis. Estas deben ser desagregadas para que permitan un tratamiento estadistico relevante. Debemos procurar conseguir para el curso tablas con no menos de 100 filas. Ejemplos clasicos de unidades de analisis para el curso son:
+
 * Distrito
 * Provincia
 * Colegio
@@ -34,11 +38,11 @@ Malas unidades, pues representan muy pocos casos, son:
 * Region
 * Departamento
 
-Si tiene una hoja de  Excel como ejemplo, y la miras por filas, cada celda tiene diferentes tipos de datos.
+Si tiene una hoja de  Excel como ejemplo, y la miras por filas, cada celda tiene diferentes tipos de datos. En nuestra tabla, la unidad de análisis es la provincia.
 
 ## Columnas de la tabla
 
-Las variable deben estar en nuestras columnas. Si miras los datos por columna, cada uno de estas celdas debe tener el mismo tipode dato. Nunca debes tener simbolos diferentes al punto decimal en las celdas que representan números. 
+Las variable deben estar en nuestras columnas. Si miras los datos por columna, cada uno de estas celdas debe tener el mismo tipo de dato. Nunca debes tener simbolos diferentes al punto decimal en las celdas que representan números. En nuestro ejemplo hay varias columnas, pero no todas son variables. Las columnas que no son variables se denominan _identificadores_.
 
 
 ## Tipo de dato
@@ -63,6 +67,8 @@ Para este curso, las variables demográficas serán utilizadas como _variables d
 # PARA EL CURSO
 
 Con tu problema público en mente, decide qué variable la representará. Prepara un reporte qué justifique tal elección.
+
+
 ____
 
 Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)
