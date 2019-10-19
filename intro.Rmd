@@ -1,0 +1,68 @@
+<center><img src="https://github.com/PoliticayGobiernoPUCP/estadistica_anapol2/raw/master/PICS/LOGO_PUCP.png" width="500"></center>
+
+<center> <header><h1>ESTADISTICA PARA EL SECTOR PUBLICO</h1>  </header></center>
+
+* Profesor:  <a href="http://www.pucp.edu.pe/profesor/jose-manuel-magallanes/" target="_blank">Dr. José Manuel Magallanes, Ph.D.</a> <br>
+    - Profesor del Departamento de Ciencias Sociales, Sección de Ciencia Política y Gobierno.
+    - [Oficina 105](https://goo.gl/maps/xuGeG6o9di1i1y5m6) - Edificio CISEPA / ECONOMIA / CCSS
+    - Telefono: (51) 1 - 6262000 anexo 4302
+    - Correo Electrónico: [jmagallanes@pucp.edu.pe](mailto:jmagallanes@pucp.edu.pe)
+    
+-----
+
+<a id='beginning'></a>
+
+
+# Sesión 1: Conceptos básicos.
+
+Para este curso debe tener una seria de conceptos básicos, los cuáles se detallan a continuación.
+
+## Tabla de datos
+
+Todo nuestro trabajo en este curso utiliza tablas de datos. Si tiene una hoja de  Excel como ejemplo, esta es una tabla de datos y consta de filas y columnas, donde una celda es un valor.
+
+## Filas de la tabla
+
+Cada fila representa la información de una unidad de análisis. Estas deben ser desagregadas para que permitan un tratamiento estadistico relevante. Debemos procurar conseguir para el curso tablas con no menos de 100 filas. Ejemplos clasicos de unidades de analisis para el curso son:
+* Distrito
+* Provincia
+* Colegio
+* Hospital
+* Funcionario
+
+Malas unidades, pues representan muy pocos casos, son:
+* Region
+* Departamento
+
+Si tiene una hoja de  Excel como ejemplo, y la miras por filas, cada celda tiene diferentes tipos de datos.
+
+## Columnas de la tabla
+
+Las variable deben estar en nuestras columnas. Si miras los datos por columna, cada uno de estas celdas debe tener el mismo tipode dato. Nunca debes tener simbolos diferentes al punto decimal en las celdas que representan números. 
+
+
+## Tipo de dato
+
+Cada celda es de un tipo de datos. Pero por columna deben ser de un solo tipo. Los tipos pueden ser:
+
+* Numérico
+* Categórico
+    - Nominal
+        - Politómico
+        - Dicotómico
+    - Ordinal
+
+## Función de la variable
+
+Tu tema de investigación se centra en la variable que denominarás la **dependiente**. Esta variable debería representa al problema público de tu interés, por lo tanto debes representar un _resultado_.
+
+Luego buscarás variables que tengan una aparente función de causa con la dependiente, las cuáles denominarás las **independientes**.
+
+Para este curso, las variables demográficas serán utilizadas como _variables de control_, pues tienen un efecto claro y obvio sobre tu dependiente.
+
+# PARA EL CURSO
+
+Con tu problema público en mente, decide qué variable la representará. Prepara un reporte qué justifique tal elección.
+____
+
+Volver al [INDICE DEL CURSO](https://politicaygobiernopucp.github.io/EstadisticaSectorPublico/)

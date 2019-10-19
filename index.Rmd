@@ -16,54 +16,44 @@
 ### Contenidos
 
 
-1. Información General
-2. Sumilla
-3. Resultado de Aprendizaje
-4. Programación de Clases
+1. Sumilla
+2. Resultado de Aprendizaje
+3. Materiales de Clases
    
 
 ____
 
 <a id='part1'></a>
 
-### 1. Información General
 
-
-* Nombre del curso: **Estadística para el Sector Público**
-* Semestre:**2019-II**
-* Horario: **Domingos de 10:00 a 13:00** (Sección F221)
-* Tipo: **Obligatorio** 
-
- 
-____
-<a id='part2'></a>
-
-### 2. Sumilla
+### 1. Sumilla
 
 Introducción a la estadística y a la investigación en políticas públicas. Medición. Estadística descriptiva. Medidas de tendencia central y medidas de dispersión. Análisis de correlaciones y medidas de asociación. Inferencia estadística y pruebas de hipótesis. Construcción de modelos cuantitativos para representar relaciones empíricas entre variables. Análisis de regresión simple para datos continuos. Análisis de regresión múltiple. Introducción al análisis de regresión para variables dependientes categóricas.
 
 
 
 ____
-<a id='part3'></a>
+<a id='part2'></a>
 
-### 3. Resultado de Aprendizaje:
+### 2. Resultado de Aprendizaje:
 
 Al finalizar el curso de Estadística para el Sector Público, el estudiante tiene una visión integral del proceso de exploración y prueba de hipótesis, tal que de soporte a la toma de decisiones políticas.
 
 
 
 ____
-<a id='part4'></a>
+<a id='part3'></a>
 
-### 4. Programación de Clases
+### 3. Materiales de Clases
+
+* [Conceptos Básicos](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/intro.html)
 
 * [Análisis Univariado Categórico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionCategorica.html)
 * [Análisis Univariado Numérico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionNumerica1.html)
 * [Análisis Bivariado de Datos](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionBivariada.html)
 * [Análisis de Regresión Lineal](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/regresionCaso.html)
 * Análisis de Regresión Logístico
-* Análisis de Conglomerados
+* Análisis Multivariado.
 
 
 
