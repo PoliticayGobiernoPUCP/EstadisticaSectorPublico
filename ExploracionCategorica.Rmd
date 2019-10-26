@@ -124,7 +124,8 @@ bar2 + theme_classic() +
                   axis.text.x = element_text(angle=45,hjust = 1)) # angulo
 ```
 
-El gráfico de Pareto muestra dos medidas, los conteos y los porcentajes acumulados. Por tradición se trata de detectar que valores representan el 80%. 
+El gráfico de Pareto muestra dos medidas: los conteos y los porcentajes acumulados. Por tradición se trata cuanto representa el 80% del eje Y acumulado. 
+
 ```{r}
 library(qcc) # instalar antes
 pareto.chart(table(sere19$MODALIDAD),cumperc = c(0,50,80,100))

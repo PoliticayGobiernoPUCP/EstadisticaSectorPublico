@@ -49,9 +49,13 @@ ____
 * [Conceptos Básicos](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/intro.html)
 
 * [Análisis Univariado Categórico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionCategorica.html)
+
 * [Análisis Univariado Numérico](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionNumerica1.html)
+
 * [Análisis Bivariado de Datos](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/ExploracionBivariada.html)
+
 * [Análisis de Regresión Lineal](https://htmlpreview.github.io/?https://github.com/PoliticayGobiernoPUCP/EstadisticaSectorPublico/blob/master/regresionCaso.html)
+
 * Análisis de Regresión Logístico
 * Análisis Multivariado.
 
