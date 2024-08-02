@@ -1,0 +1,158 @@
+---
+title: "Plantilla Para Estadistica"
+output:
+  html_document:
+    df_print: paged
+---
+
+# 1. Pasos en tu computadora:
+
+a. En su computadora cree un folder llamado "Proyecto_Estadistica"
+b. Abra RStudio.
+c. Desde RStudio ingrese al folder creado en el paso A.
+d. Cree un nuevo **Notebook** y guardelo con el nombre "codigos.RMD". Este archivo debe guardarse en el folder creado.
+e. Dentro del folder "Proyecto_Estadistica", cree un folder llamado "data". Puede usar RStudio para ello.
+f. Ponga su archivo de datos en en el folder "data"
+
+# 2. Lectura y Preparación de datos:
+
+a. Verifique que tiene instalado el paquete **readxl**, si no está, proceda a instalarlo. Luego lea sus datos así
+
+```{r leerData}
+library(readxl)
+
+misDatos <- read_excel("data/pavimentando.xlsx") # ponga el nombre de su archivo.
+```
+
+b. Vea el nombre de sus columnas (nombre de las variables)
+
+```{r losNames}
+names(misDatos)
+```
+
+Los nombres no deben tener espacios ni acentos ni la letra ñ. SI es necesario, cámbielas en Excel y vuelva a cargar (rehaga todo lo anterior).
+
+c. Verifique que **R** tenga los datos correctos:
+
+a. Verifique que los numeros no estén entre comillas.
+b. Verifique que si tiene una variable ordinal (p.ejem. 'alto','medio','bajo'), esté como _factor_, es decir, de tipo categórico.
+
+```{r tipos}
+str(misDatos)
+```
+En este caso, las variables "consejocomunal","priorizado","uribista","ejecucion" deberían ser _factor_ (pero no son ordinales):
+
+```{r transFactor}
+
+misDatos$consejocomunal=factor(misDatos$consejocomunal,
+                               levels = c(0,1), # lo que hay en la data actual
+                               labels = c("_no","_si"), # como aparecerá ahora
+                               ordered = FALSE) # TRUE si fuera ordinal
+
+misDatos$priorizado=factor(misDatos$priorizado,
+                               levels = c(0,1),
+                               labels = c("_no","_si"),
+                               ordered = FALSE)
+
+misDatos$uribista=factor(misDatos$uribista,
+                               levels = c(0,1),
+                               labels = c("_no","_si"),
+                               ordered = FALSE)
+
+misDatos$ejecucion=factor(misDatos$ejecucion,
+                               levels = c(0,1),
+                               labels = c("_no","_si"),
+                               ordered = FALSE)
+```
+
+
+
+# 3. Explorar la Variable Dependiente
+
+Esta es la variable central de tu estudio.
+
+* Estadísticos Básicos:
+
+```{r univarSUMMARY}
+summary(misDatos$apropiaciondolar)
+```
+
+Preguntense:
+- La media resume bien? Una media representativa nos hace pensar que los valores de la variable orbitan _cerca_ a ella. Si la media y la mediana están muy lejossabes que hay  _desigualdad_ en esa variable.
+
+# 4. Exploración Bivariada
+
+Aquí debes comparar la Variable Dependiente con cada una de las demás. 
+
+a. Comparando con las otras numéricas:
+
+```{r bivarNUMNUM}
+library("ggpubr")
+
+ggscatter(misDatos, 
+          x = "pctopo", y = "apropiaciondolar", 
+          add = "reg.line", 
+          conf.int = TRUE, 
+          add.params = list(color = "blue", fill = "lightgray"),
+          cor.coef = TRUE, cor.method = "pearson") #spearman?
+```
+
+Del gráfico anterior, el R (coeficiente de correlación) puede ir de -1 a 1, mientras más cerca a cero indica que relación es debil, mientras más lejos de cero, relación se fortalece. Cuando el R coeficiente de correlación es alto, la linea azul tendrá los punto mas cerca a ella.
+
+b. Comparando con las categóricas
+
+```{r bivarNUMCAT}
+boxplot(apropiaciondolar~ejecucion,data=misDatos)
+```
+
+En la horizontal están las categorías. Pregúntate sí la variable dependiente toma valores similares o no.
+
+# 4. Regresión
+
+Aqui puedes proponer probar tus hipótesis. Hay que ir de menos a más. Si tienes variables de control, usalas siempre.
+
+a. Primera hipótesis
+
+```{r REGRE1}
+hipotesis1=formula(apropiaciondolar~priorizado + poblacioncienmil+ nbi)
+regre1=lm(hipotesis1,data=misDatos)
+summary(regre1)
+```
+
+Aqui verifica:
+- La variable independiente de interés es significativa (ves "." o "asteriscos")? Si no es significativa, NO tiene efecto. 
+- El efecto, es positivo o negativo (mira el signo).
+
+En este caso, la VI priorizado indica, que cuando vale "si" no es diferente a si vale "no". Por ello no tiene efecto.
+
+a. Segunda hipótesis
+
+```{r REGRE2}
+hipotesis2=formula(apropiaciondolar~priorizado +  consejocomunal + poblacioncienmil+ nbi)
+regre2=lm(hipotesis2,data=misDatos)
+summary(regre2)
+```
+
+En este caso, la VI consejo comunal  indica, que cuando vale "si" es diferente a si vale "no". Por ello tiene efecto positivo: cuando haya consejo comunal aumenta el presupuesto.
+
+a. Tercera hipótesis
+
+```{r REGRE3}
+hipotesis3=formula(apropiaciondolar~priorizado  +  consejocomunal +  pctopo + poblacioncienmil+ nbi)
+regre3=lm(hipotesis3,data=misDatos)
+summary(regre3)
+```
+
+Aqui no hay cualitativamente mayor cambio. Finalmente, comparemos los modelos que tenemos:
+
+```{r}
+#es regre2 mejor que regre1?
+anova(regre1,regre2)
+```
+El pvalor significativo nos indica que la regre2 es mejor opcion a la regre3.
+
+```{r}
+#es regre3 mejor que regre2?
+anova(regre2,regre3)
+```
+El pvalor NO significativo nos indica indican que la regre3 NO es mejor opcion a la regre2.

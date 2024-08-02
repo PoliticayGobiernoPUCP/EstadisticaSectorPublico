@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Leer los datos:
+
+```{r}
+pavi=rio::import("data/pavimentando.xlsx")
+```
+
+```{r}
+library(summarytools)
+view(summarytools::dfSummary(pavi,plain.ascii = F,style = "grid",tmp.img.dir  = "/tmp"))
+```
+```{r}
+library("ggpubr")
+ggscatter(pavi, x = "pctopo", y = "apropiaciondolar", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson")
+```
+
+```{r}
+boxplot(apropiaciondolar~ejecucion,data=pavi)
+```
+
+```{r}
+summary(lm(apropiaciondolar~pctopo+ejecucion,data=pavi))
+```
+
